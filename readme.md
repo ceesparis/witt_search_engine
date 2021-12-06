@@ -19,7 +19,7 @@ This application will offer an alternative search engine for the unpublished wor
 ![search results for 'Traum | Freud'](doc/searchresults.jpeg)
 
 *visualizations search results*
-![visualizations search results](dog/graphs.jpeg)
+![visualizations search results](doc/graphs.jpeg)
 
 
 **data sources**
@@ -39,7 +39,7 @@ Such as returning the ‘types’ of source where the words is found (found rema
 It also provides visualisations for the occurrence of a word throughout the years. 
 
 What is bad about the site is that it it lacking some functionality which is crucial for efficient research. 
-For a start, you can either search for multiple words in the whole body of work, or for two words connect with a literal ‘&’ sign, but you cannot search for places in the work where two words are in close vicinity to each other, although not directly tied via an ‘&’-sign.  
+For a start, you can either search for multiple words in the whole body of work, or for two words connected with a literal ‘&’ sign, but you cannot search for places in the work where two words are in close vicinity to each other, although not directly tied via an ‘&’-sign.  
 The second issue is that there is no way to limit search to literal input. Words occurring in other words are also returned. 
 
 It is often the case that you are interested in a word only in a specific context. For example, you want to research what Wittgenstein said about dreams, but specifically in relation to Freud. Such a combined search is currently hard to do in this search engine, which leads to inefficient searching of the work. 
@@ -55,6 +55,7 @@ Also, the search engine on the whole is not very user friendly.
 - implement a program that can search this xml file not only for specific words, but also for passages where multiple words occur. 
 - search for the searchwords individually as well as for 'contexts' where they all occur, so that the subsequent visualizations can be a lot more informative. 
 - keeping intact the functionality of the University of Bergen search engine, by making use of the xml make up (keeping track of what kind of work the word is found in etc.)
+- making the application user-friendly
 
 
 
