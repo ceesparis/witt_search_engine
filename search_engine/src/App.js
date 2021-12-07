@@ -1,14 +1,23 @@
-import { useState } from 'react';
-import Xml_reader from './scripts/xml_reader'
+import { useEffect, useState } from 'react';
+import Xml_reader from './xml_reader'
 
 function App() {
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState([]);
+  // const [results, setResults] = useState([]);
   const [database, setDatabase] = useState('');
-  // const [searchInfo, setSearchInfo] = useState({});
-  // const test = Xml_reader();
-  // console.log(test);
-  // setDatabase(test);
+ 
+  const loadWorks = async () => {
+    //  e.preventDefault()
+     await Xml_reader(setDatabase);
+     console.log(database);
+  }
+
+  useEffect(() => {
+    loadWorks();
+    // console.log('render');
+  }, []);
+
+  console.log(database)
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -16,12 +25,13 @@ function App() {
       return;
     }
     else {
-      // console.log(database);
-      const test = await Xml_reader();
-      console.log(test);
-      // alert('j')
+      // const test = Xml_reader(setDatabase);
+      // console.log(test)
+      
     }
+
   }
+
 
   return (
     <div className='Searchengine'>
@@ -43,7 +53,6 @@ function App() {
             <div className='Result_text'>
               <a href='#'>expand</a>
               <p>
-                {database}
                 paragraph
               </p>
               <a href='#'>expand</a>
