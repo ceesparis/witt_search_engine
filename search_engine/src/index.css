@@ -48,6 +48,18 @@ header {
   float: left;
 }
 
+.result_text .searchmatch {
+  font-weight: 700;
+}
+
+
+a {
+  text-align: center;
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .Result_text {
   text-align: center;
 }

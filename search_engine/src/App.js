@@ -1,49 +1,39 @@
 import { useEffect, useState } from 'react';
 import data from './Database.json'
+import Highlighter from 'react-highlight-words';
 
 function App() {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
   const [database, setDatabase] = useState([]);
   const [result_counts, setCount] = useState(0)
- 
-  // const loadWorks = () => { 
-  //   return new Promise((resolve, reject)=> {
-  //   setDatabase(data);
-  //     if(true){
-  //       resolve()
-  //     } else {
-  //       reject('error: something went wrong')
-  //     }
-  //   });
-  // }
+
 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
     setDatabase(data)
 
-    // await loadWorks();
-    // alert('Database Loaded');
-    // console.log(database[0]);
   }, [])
 
   const searchDatabase = (search) => {
     const searchword = Object.values({search});
     var counter = 0;
-    var text_list = [];
+    var result_list = [];
     // console.log(searchword);
     for (var i in database) {
       const entry = database[i]
       const text = entry.text;
-      // console.log(text);
       if (text.includes(searchword)){
-          console.log(text);
+
+          // var high_text = new Mark(text);
+          // high_text.mark("Todes");
+          // console.log(high_text);
           counter += 1;
-          text_list.push(text)
+          result_list.push(entry)
       }
     }
     setCount(counter);
-    setResults(text_list);
+    setResults(result_list);
   }
 
   const handleSearch = async (e) => {
@@ -62,6 +52,14 @@ function App() {
   }
 
   return (
+    // <Highlighter
+    //       highlightClassName="Results"
+    //       searchWords={search}
+    //       autoEscape={true}
+    //       textToHighlight={result.text}
+    //       />,
+            
+
     <div className='Searchengine'>
       <header>
         <h1>Wittgenstein Search Engine</h1>
@@ -77,21 +75,30 @@ function App() {
       <div className='Results'>
         {
           results.map((result, i) => {
+            const Highlight = ({search}) => (
+              <strong className="result_text">{search}</strong>
+            );
             return (
-              <div className='Result'>
-            <span className='result_title'>title goes here</span>
-            <span className='result_date'>date goes here</span>
-            <div className='Result_text'>
+              // <Highlighter
+              // highlightClassName="Results"
+              // searchWords={search}
+              // autoEscape={true}
+              // textToHighlight={result.text}
+              // />,
+              <div className='Result' key={i}>
+            <span className='result_title'>{result.name}</span>
+            <span className='result_date'>{result.date}</span>
+            <div className="result_text">
               <a href='#'>expand</a>
-              <p>
-                paragraph
+              <p id='result_text'>
+                {result.text}
               </p>
               <a href='#'>expand</a>
-            </div>
           </div>
-            )
-          })
-        }
+        </div>
+          )
+        })
+      }
       </div>
     </div>
   );
