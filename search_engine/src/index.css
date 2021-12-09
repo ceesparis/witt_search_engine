@@ -37,6 +37,7 @@ header {
   border-radius: 16px;
 }
 
+
 .Result:hover {
   filter: brightness(110%)
 }
@@ -48,10 +49,21 @@ header {
   float: left;
 }
 
-.result_text .searchmatch {
-  font-weight: 700;
+.result_text {
+  max-block-size: 300px;
+  overflow-y: scroll;
 }
 
+.BigResult {
+  font-size: x-large;
+  width: 100%;
+  padding: 100px;
+  margin-bottom: 16px;
+  background-color: rgb(240, 231, 216);
+  border-radius: 16px;
+  max-block-size: none;
+  /* margin: auto; */
+}
 
 a {
   text-align: center;

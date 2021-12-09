@@ -7,12 +7,13 @@ function App() {
   const [results, setResults] = useState([]);
   const [database, setDatabase] = useState([]);
   const [result_counts, setCount] = useState(0)
+  const [enlarge_result, setEnlarge] = useState(false)
+  const [big_res, setBigres] = useState([])
 
 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
     setDatabase(data)
-
   }, [])
 
   const searchDatabase = (search) => {
@@ -45,20 +46,24 @@ function App() {
       }
   }
 
+  const enlargeResult = (result) => {
+    setEnlarge(true);
+    setBigres(result);
+  }
+
+  const goBack = () => {
+    setEnlarge(false);
+  }
+
   if (database.length === 0) {
     return (
       <div>loading...</div>
     )
   }
 
+  if (!enlarge_result)
+  {
   return (
-    // <Highlighter
-    //       highlightClassName="Results"
-    //       searchWords={search}
-    //       autoEscape={true}
-    //       textToHighlight={result.text}
-    //       />,
-            
 
     <div className='Searchengine'>
       <header>
@@ -75,25 +80,20 @@ function App() {
       <div className='Results'>
         {
           results.map((result, i) => {
-            const Highlight = ({search}) => (
-              <strong className="result_text">{search}</strong>
-            );
+            
             return (
-              // <Highlighter
-              // highlightClassName="Results"
-              // searchWords={search}
-              // autoEscape={true}
-              // textToHighlight={result.text}
-              // />,
-              <div className='Result' key={i}>
+              <div className='Result' key={i} onClick={() => enlargeResult(result)}>
             <span className='result_title'>{result.name}</span>
             <span className='result_date'>{result.date}</span>
             <div className="result_text">
-              <a href='#'>expand</a>
-              <p id='result_text'>
-                {result.text}
-              </p>
-              <a href='#'>expand</a>
+              {/* <a href='#'>expand</a> */}
+              <Highlighter
+                highlightClassName="result_text"
+                searchWords={[search]}
+                autoEscape={true}
+                textToHighlight={result.text}
+              />
+              {/* <a href='#'>expand</a> */}
           </div>
         </div>
           )
@@ -102,6 +102,29 @@ function App() {
       </div>
     </div>
   );
+}
+else {
+  return (
+    <div>
+    <div className='BigResult'>
+            <span className='result_title'>{big_res.name}</span>
+            <span className='result_date'>{big_res.date}</span>
+            <div className="bigresult_text">
+  
+              <Highlighter
+                highlightClassName="bigresult_text"
+                searchWords={[search]}
+                autoEscape={true}
+                textToHighlight={big_res.text}
+              />
+         
+            </div>
+    </div>
+    <button onClick={goBack}>goback</button>
+    </div>
+
+  )
+}
 }
 
 export default App;
