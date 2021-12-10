@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import data from './Database.json'
+import data1 from './Database.json';
+import data2 from './newDatabase.json';
 import Highlighter from 'react-highlight-words';
 import { Checkbox, Slider } from '@mui/material';
 
@@ -17,7 +18,8 @@ function App() {
 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
-    setDatabase(data)
+    const data = data1+data2;
+    setDatabase(data);
   }, [])
 
   const valueText = (value) => {
@@ -26,7 +28,6 @@ function App() {
 
   const tick = () => {
     setStrict(!strict_search);
-    console.log(strict_search);
   }
 
   const handleChange = (event, newValue) => {
@@ -38,9 +39,8 @@ function App() {
     search = search.trim()
     if (strict_search) {
       search = ' ' + search + ' ';
-      console.log(search);
     }
-    
+
     const searchword = Object.values({search});
     var counter = 0;
     var result_list = [];
@@ -117,7 +117,7 @@ function App() {
         </div>
        
         <p>Search Results: {result_counts}</p>
-        <input type="checkbox" value="strict search" onClick={tick}/>strict search
+        <Checkbox value="strict search" onClick={tick}/>strict search
       </header>
       <div className='Results'>
         {
