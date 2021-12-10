@@ -72,6 +72,10 @@ header {
   background-color: green;
 }
 
+#slider{
+  width: 300px;
+}
+
 a {
   text-align: center;
   margin: auto;

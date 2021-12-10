@@ -1,29 +1,54 @@
 import { useEffect, useState } from 'react';
 import data from './Database.json'
 import Highlighter from 'react-highlight-words';
+import { Checkbox, Slider } from '@mui/material';
 
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
   const [results, setResults] = useState([]);
   const [database, setDatabase] = useState([]);
-  const [result_counts, setCount] = useState(0)
-  const [enlarge_result, setEnlarge] = useState(false)
-  const [big_res, setBigres] = useState([])
+  const [result_counts, setCount] = useState(0);
+  const [enlarge_result, setEnlarge] = useState(false);
+  const [big_res, setBigres] = useState([]);
   const [search, setSearch] = useState('');
+  const [year_range, setRange] = useState([1913, 1951]);
+  const [strict_search, setStrict] = useState(false);
+  
 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
     setDatabase(data)
   }, [])
 
+  const valueText = (value) => {
+    return {value};
+  }
+
+  const tick = () => {
+    setStrict(!strict_search);
+    console.log(strict_search);
+  }
+
+  const handleChange = (event, newValue) => {
+    setRange(newValue);
+    // handleSearch(event);
+  }
+
   const searchDatabase = (search) => {
+    search = search.trim()
+    if (strict_search) {
+      search = ' ' + search + ' ';
+      console.log(search);
+    }
+    
     const searchword = Object.values({search});
     var counter = 0;
     var result_list = [];
     for (var i in database) {
       const entry = database[i]
       const text = entry.text;
-      if (text.includes(searchword)){
+      const year = entry.date.substring(0, 4);
+      if (text.includes(searchword) && (year >= year_range[0] && year <= year_range[1])){
           counter += 1;
           result_list.push(entry)
       }
@@ -38,9 +63,16 @@ function App() {
     if (search === ''){
       return;
     } else {
+        // filter_Database(year_range);
         searchDatabase(search);
       }
   }
+
+  // const filter_Database = (year_range) => {
+  //   for (var i in database){
+
+  //   }
+  // }
 
   const enlargeResult = (result) => {
     setEnlarge(true);
@@ -71,7 +103,21 @@ function App() {
              onChange={e => setSearch(e.target.value)}
              />
         </form>
+        <div id='slider'>
+          <Slider
+          getAriaLabel={() => 'Year range'}
+          value={year_range}
+          min={1912}
+          max={1951}
+          onChange={handleChange}
+          onChangeCommitted={handleSearch}
+          valueLabelDisplay="auto"
+          getAriaValueText={valueText}
+          />
+        </div>
+       
         <p>Search Results: {result_counts}</p>
+        <input type="checkbox" value="strict search" onClick={tick}/>strict search
       </header>
       <div className='Results'>
         {
