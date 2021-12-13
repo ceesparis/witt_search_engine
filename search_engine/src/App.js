@@ -4,7 +4,6 @@ import Highlighter from 'react-highlight-words';
 import { Checkbox, Slider } from '@mui/material';
 import Plot from 'react-plotly.js'
 
-
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
   const [results, setResults] = useState([]);
@@ -38,7 +37,7 @@ function App() {
 
   const show_graph = () => {
     setGraph(!graph);
-    console.log(graph)
+    console.log('on!')
   }
 
   const handleChange = (event, newValue) => {
@@ -46,25 +45,22 @@ function App() {
     // handleSearch(event);
   }
 
+  const countOccurences = (string, word) => {
+    return string.split(word).length - 1;
+ }
+
   const searchDatabase = (search) => {
     search = search.trim()
-    // if (strict_search) {
-    //   search = /\b\b/
-    // }
-    
-  const countOccurences = (string, word) => {
-      return string.split(word).length - 1;
-   }
-
-    var searchword = Object.values({search});
-    // console.log(searchword)
-
+    setWordcount(0);
+    setCount(0);
+    addData({})
     var counter = 0;
     var word_counter = 0;
+    var searchword = Object.values({search});
+    var graph = {}
     var result_list = [];
     if (strict_search) {
       let regex = new RegExp('\\b' + searchword + '(?![üïöë])'+  '\\b', 'g');
-      // console.log(regex);
       for (var i in database) {
         const entry = database[i]
         const text = entry.text;
@@ -75,17 +71,30 @@ function App() {
             counter += 1;
             result_list.push(entry);
 
-            if (graph_info[year]){
-              graph_info[year] += count;
+            if (graph[year]) {
+              graph[year] += count;
             } else {
-              graph_info[year] = count;
+              graph[year] = count;
             }
+
+            // if (graph_info[year]){
+            //   graph_info[year] += count;
+            // } else {
+            //   graph_info[year] = count;
+            // }
+
+            // const foo = {...graph_info, year:2000}
           }
     }
+
+
+    addData(graph);
     console.log(graph_info)
     setCount(counter);
     setResults(result_list);
     setFinalSearch(regex);
+    // setFinal(graph_info)
+    // console.log(final_info);
     setWordcount(word_counter)
     } else {
     for (var j in database) {
@@ -97,12 +106,22 @@ function App() {
           word_counter += count;
           counter += 1;
           result_list.push(entry);
+
+          if (graph[year]){
+            graph[year] += count;
+          } else {
+            graph[year] = count;
+          }
       }
     }
-    setWordcount(word_counter)
+    console.log('graph:', {graph_info})
+    addData(graph);
+    setWordcount(word_counter);
     setCount(counter);
     setResults(result_list);
     setFinalSearch(search);
+    // setFinal(graph_info)
+    // console.log(final_info);
   }
 
 }
@@ -161,14 +180,13 @@ function App() {
         <p>{result_counts} fragments were found</p>
         <p> search word(s) occurred {word_counts} times in the database</p>
         <Checkbox value="strict search" onClick={tick}/>strict search
-        {/* <Checkbox value='show graph' onClick={show_graph}/>graph */}
       </header>
       <div className='Results'>
-      <button type='button' onClick={show_graph}> show graph </button>
+      <button type="button" onClick={show_graph}> show graph </button>
         {
-          results.map((result, i) => { 
+          results.map((result) => { 
             return (
-            <div className='Result' key={i} onClick={() => enlargeResult(result)}>
+            <div className='Result' key={result.name} onClick={() => enlargeResult(result)}>
             <span className='result_title'>{result.name}</span>
             <span className='result_date'>{result.date}</span>
             <div className="result_text">
@@ -192,13 +210,13 @@ else if (graph){
     <Plot
     data={[
       {
-        x: year_range,
-        y: result_counts,
+        x:Object.keys(graph_info),
+        y:Object.values(graph_info),
         type: 'scatter',
         mode: 'lines',
         marker: {color: 'red'},
       },
-      {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
+      // {type: 'line', x: [graph_info], y: [graph_info]},
     ]}
     layout={ {width: 320, height: 240, title: 'A Fancy Plot'} }
     />
