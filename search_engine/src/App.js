@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import data1 from './Database.json';
-import data2 from './newDatabase.json';
+import data from './totalDatabase.json';
 import Highlighter from 'react-highlight-words';
 import { Checkbox, Slider } from '@mui/material';
+
 
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
-    const data = data1+data2;
+    // const data3 = concatinator()
     setDatabase(data);
   }, [])
 
@@ -28,6 +28,7 @@ function App() {
 
   const tick = () => {
     setStrict(!strict_search);
+    // console.log(strict_search)
   }
 
   const handleChange = (event, newValue) => {
@@ -37,42 +38,55 @@ function App() {
 
   const searchDatabase = (search) => {
     search = search.trim()
-    if (strict_search) {
-      search = ' ' + search + ' ';
-    }
+    // if (strict_search) {
+    //   search = /\b\b/
+    // }
 
-    const searchword = Object.values({search});
+    var searchword = Object.values({search});
+    // console.log(searchword)
+
     var counter = 0;
     var result_list = [];
-    for (var i in database) {
-      const entry = database[i]
+    if (strict_search) {
+      let regex = new RegExp('\\b' + searchword + '(?![üïöë])'+  '\\b', 'g');
+      // console.log(regex);
+      for (var i in database) {
+        const entry = database[i]
+        const text = entry.text;
+        const year = entry.date.substring(0, 4);
+          if ((regex.test(text)) && (year >= year_range[0] && year <= year_range[1])){
+            counter += 1;
+            result_list.push(entry);
+          }
+    }
+    setCount(counter);
+    setResults(result_list);
+    setFinalSearch(regex);
+    } else {
+    for (var j in database) {
+      const entry = database[j];
       const text = entry.text;
       const year = entry.date.substring(0, 4);
       if (text.includes(searchword) && (year >= year_range[0] && year <= year_range[1])){
           counter += 1;
-          result_list.push(entry)
+          result_list.push(entry);
       }
     }
     setCount(counter);
     setResults(result_list);
-    setFinalSearch(search)
+    setFinalSearch(search);
   }
+
+}
 
   const handleSearch = async (e) => {
     e.preventDefault()
     if (search === ''){
       return;
     } else {
-        // filter_Database(year_range);
         searchDatabase(search);
       }
   }
-
-  // const filter_Database = (year_range) => {
-  //   for (var i in database){
-
-  //   }
-  // }
 
   const enlargeResult = (result) => {
     setEnlarge(true);
@@ -131,7 +145,7 @@ function App() {
               <Highlighter
                 highlightClassName="result_text"
                 searchWords={[finalsearch]}
-                autoEscape={true}
+                autoEscape={false}
                 textToHighlight={result.text}
               />
           </div>
