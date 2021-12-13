@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import data from './totalDatabase.json';
 import Highlighter from 'react-highlight-words';
 import { Checkbox, Slider } from '@mui/material';
+import Plot from 'react-plotly.js'
 
 
 function App() {
@@ -14,13 +15,18 @@ function App() {
   const [search, setSearch] = useState('');
   const [year_range, setRange] = useState([1913, 1951]);
   const [strict_search, setStrict] = useState(false);
+  const [graph, setGraph] = useState(false);
+  const [word_counts, setWordcount] = useState(0);
+  const [graph_info, addData] = useState({});
   
 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
     // const data3 = concatinator()
     setDatabase(data);
+
   }, [])
+
 
   const valueText = (value) => {
     return {value};
@@ -28,7 +34,11 @@ function App() {
 
   const tick = () => {
     setStrict(!strict_search);
-    // console.log(strict_search)
+  }
+
+  const show_graph = () => {
+    setGraph(!graph);
+    console.log(graph)
   }
 
   const handleChange = (event, newValue) => {
@@ -41,11 +51,16 @@ function App() {
     // if (strict_search) {
     //   search = /\b\b/
     // }
+    
+  const countOccurences = (string, word) => {
+      return string.split(word).length - 1;
+   }
 
     var searchword = Object.values({search});
     // console.log(searchword)
 
     var counter = 0;
+    var word_counter = 0;
     var result_list = [];
     if (strict_search) {
       let regex = new RegExp('\\b' + searchword + '(?![üïöë])'+  '\\b', 'g');
@@ -55,23 +70,36 @@ function App() {
         const text = entry.text;
         const year = entry.date.substring(0, 4);
           if ((regex.test(text)) && (year >= year_range[0] && year <= year_range[1])){
+            const count = countOccurences(text, regex);
+            word_counter += count;
             counter += 1;
             result_list.push(entry);
+
+            if (graph_info[year]){
+              graph_info[year] += count;
+            } else {
+              graph_info[year] = count;
+            }
           }
     }
+    console.log(graph_info)
     setCount(counter);
     setResults(result_list);
     setFinalSearch(regex);
+    setWordcount(word_counter)
     } else {
     for (var j in database) {
       const entry = database[j];
       const text = entry.text;
       const year = entry.date.substring(0, 4);
       if (text.includes(searchword) && (year >= year_range[0] && year <= year_range[1])){
+          const count = countOccurences(text, searchword);
+          word_counter += count;
           counter += 1;
           result_list.push(entry);
       }
     }
+    setWordcount(word_counter)
     setCount(counter);
     setResults(result_list);
     setFinalSearch(search);
@@ -103,7 +131,7 @@ function App() {
     )
   }
 
-  if (!enlarge_result)
+  if (!enlarge_result && !graph)
   {
   return (
 
@@ -130,15 +158,17 @@ function App() {
           />
         </div>
        
-        <p>Search Results: {result_counts}</p>
+        <p>{result_counts} fragments were found</p>
+        <p> search word(s) occurred {word_counts} times in the database</p>
         <Checkbox value="strict search" onClick={tick}/>strict search
+        {/* <Checkbox value='show graph' onClick={show_graph}/>graph */}
       </header>
       <div className='Results'>
+      <button type='button' onClick={show_graph}> show graph </button>
         {
-          results.map((result, i) => {
-            
+          results.map((result, i) => { 
             return (
-              <div className='Result' key={i} onClick={() => enlargeResult(result)}>
+            <div className='Result' key={i} onClick={() => enlargeResult(result)}>
             <span className='result_title'>{result.name}</span>
             <span className='result_date'>{result.date}</span>
             <div className="result_text">
@@ -157,6 +187,23 @@ function App() {
     </div>
   );
 }
+else if (graph){
+  return (
+    <Plot
+    data={[
+      {
+        x: year_range,
+        y: result_counts,
+        type: 'scatter',
+        mode: 'lines',
+        marker: {color: 'red'},
+      },
+      {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
+    ]}
+    layout={ {width: 320, height: 240, title: 'A Fancy Plot'} }
+    />
+  )
+}
 else {
   return (
     <div className='BigResult'>
@@ -168,7 +215,7 @@ else {
               <Highlighter
                 highlightClassName="bigresult_text"
                 searchWords={[finalsearch]}
-                autoEscape={true}
+                autoEscape={false}
                 textToHighlight={big_res.text}
               />
          
