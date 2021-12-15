@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import data from './totalDatabase.json';
-import Highlighter from 'react-highlight-words';
-import { Checkbox, Slider } from '@mui/material';
-import Plot from 'react-plotly.js'
+import {Checkbox} from '@mui/material';
+import Slider from './components/slider'
+import Searchbar from './components/searchbar'
+import Results from './components/results';
+import Graph from './components/graph'
+import BigResult from './components/bigresult'
 
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
@@ -23,7 +26,6 @@ function App() {
     // import('./Database.json').then(data => setDatabase(data));
     // const data3 = concatinator()
     setDatabase(data);
-
   }, [])
 
 
@@ -50,13 +52,10 @@ function App() {
  }
 
   const searchDatabase = (search) => {
-    search = search.trim()
-    setWordcount(0);
-    setCount(0);
-    addData({})
+    var searchword = search.trim()
     var counter = 0;
     var word_counter = 0;
-    var searchword = Object.values({search});
+    searchword = Object.values({searchword});
     var graph = {}
     var result_list = [];
     if (strict_search) {
@@ -76,25 +75,13 @@ function App() {
             } else {
               graph[year] = count;
             }
-
-            // if (graph_info[year]){
-            //   graph_info[year] += count;
-            // } else {
-            //   graph_info[year] = count;
-            // }
-
-            // const foo = {...graph_info, year:2000}
           }
     }
-
-
     addData(graph);
     console.log(graph_info)
     setCount(counter);
     setResults(result_list);
     setFinalSearch(regex);
-    // setFinal(graph_info)
-    // console.log(final_info);
     setWordcount(word_counter)
     } else {
     for (var j in database) {
@@ -120,8 +107,6 @@ function App() {
     setCount(counter);
     setResults(result_list);
     setFinalSearch(search);
-    // setFinal(graph_info)
-    // console.log(final_info);
   }
 
 }
@@ -144,6 +129,7 @@ function App() {
     setEnlarge(false);
   }
 
+
   if (database.length === 0) {
     return (
       <div>loading...</div>
@@ -153,94 +139,30 @@ function App() {
   if (!enlarge_result && !graph)
   {
   return (
-
     <div className='Searchengine'>
       <header>
         <h1>Wittgenstein Search Engine</h1>
-        <form className='Searchbar' onSubmit={handleSearch}>
-            <input
-             type='search'
-             value={search}
-             onChange={e => setSearch(e.target.value)}
-             />
-        </form>
-        <div id='slider'>
-          <Slider
-          getAriaLabel={() => 'Year range'}
-          value={year_range}
-          min={1912}
-          max={1951}
-          onChange={handleChange}
-          onChangeCommitted={handleSearch}
-          valueLabelDisplay="auto"
-          getAriaValueText={valueText}
-          />
-        </div>
-       
+        <Searchbar setSearch={setSearch}/>
+        <button type="button" onClick={handleSearch}> search </button>
+        <Slider year_range = {year_range} handleChange = {handleChange}
+         handleSearch = {handleSearch} valueText ={valueText}/>
         <p>{result_counts} fragments were found</p>
         <p> search word(s) occurred {word_counts} times in the database</p>
         <Checkbox value="strict search" onClick={tick}/>strict search
       </header>
-      <div className='Results'>
       <button type="button" onClick={show_graph}> show graph </button>
-        {
-          results.map((result) => { 
-            return (
-            <div className='Result' key={result.name} onClick={() => enlargeResult(result)}>
-            <span className='result_title'>{result.name}</span>
-            <span className='result_date'>{result.date}</span>
-            <div className="result_text">
-              <Highlighter
-                highlightClassName="result_text"
-                searchWords={[finalsearch]}
-                autoEscape={false}
-                textToHighlight={result.text}
-              />
-          </div>
-        </div>
-          )
-        })
-      }
-      </div>
+      <Results results = {results} finalsearch = {finalsearch} enlargeResult={enlargeResult}/>
     </div>
   );
 }
 else if (graph){
   return (
-    <Plot
-    data={[
-      {
-        x:Object.keys(graph_info),
-        y:Object.values(graph_info),
-        type: 'scatter',
-        mode: 'lines',
-        marker: {color: 'red'},
-      },
-      // {type: 'line', x: [graph_info], y: [graph_info]},
-    ]}
-    layout={ {width: 320, height: 240, title: 'A Fancy Plot'} }
-    />
+    <Graph graph_info = {graph_info}/>
   )
 }
 else {
   return (
-    <div className='BigResult'>
-            <button id="goback" onClick={goBack}>goback</button>
-            <span className='result_title'>{big_res.name}</span>
-            <span className='result_date'>{big_res.date}</span>
-            <div className="bigresult_text">
-  
-              <Highlighter
-                highlightClassName="bigresult_text"
-                searchWords={[finalsearch]}
-                autoEscape={false}
-                textToHighlight={big_res.text}
-              />
-         
-            </div>
-    </div>
-  
-
+    <BigResult big_res={big_res} finalsearch={finalsearch} goBack={goBack}/>
   )
 }
 }
