@@ -27,7 +27,6 @@ function App() {
   const [graph, setGraph] = useState(false);
   const [word_counts, setWordcount] = useState(0);
   const [graph_info, addData] = useState({});
-
   const cache = React.useRef(new CellMeasurerCache({
     fixedWidth: true, 
     defaultHeight: 200,
@@ -163,9 +162,9 @@ function App() {
       </header>
       {result_counts > 0 && !graph ? <button className="graphButton" type="button" onClick={show_graph}> show graph </button>: null}
       {graph ? <div id="graph">
-        <Graph graph_info={graph_info} show_graph={show_graph}/>
+        <Graph graph_info={graph_info} show_graph={show_graph} />
         </div>: null}
-      <Results results = {results} finalsearch = {finalsearch} enlargeResult={enlargeResult} cache={cache}/>
+      <Results results = {results} finalsearch = {finalsearch} enlargeResult={enlargeResult}/>
     </div>
   );
 }

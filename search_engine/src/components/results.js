@@ -1,7 +1,6 @@
 
 import Result from './result.js'
-import React from 'react'
-// import cache from '../App.js'
+import React, {useRef, useEffect} from 'react'
 import {
   List,
   AutoSizer,
@@ -14,12 +13,41 @@ import { height } from '@mui/system'
 import App from '../App.js'
 
 
-const Results = ({results, finalsearch, enlargeResult, cache}) => {
-  // const cache = React.useRef(new CellMeasurerCache({
-  //   fixedWidth: true, 
-  //   defaultHeight: 200,
-  // })
-  // );
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
+function areResultsEqual(results1, results2) {
+  if (results1.length !== results2.length) {
+    return false;
+  }
+
+  return results1.every((result, i) => 
+    result.name === results2[i].name
+  )
+}
+
+const Results = ({results, finalsearch, enlargeResult}) => {
+  const cache = useRef(new CellMeasurerCache({
+    fixedWidth: true, 
+    defaultHeight: 200,
+  })
+  );
+
+  const previousResults = usePrevious(results);
+
+  if (previousResults && !areResultsEqual(results, previousResults)) {
+
+    cache.current = new CellMeasurerCache({
+      fixedWidth: true, 
+      defaultHeight: 200,
+    })
+  }
+
     return (
         <div className='Results'>
         <AutoSizer>
