@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
+import React from 'react';
 import data from './totalDatabase.json';
 import {Checkbox} from '@mui/material';
 import Slider from './components/slider'
@@ -6,6 +7,12 @@ import Searchbar from './components/searchbar'
 import Results from './components/results';
 import Graph from './components/graph'
 import BigResult from './components/bigresult'
+import {
+  List,
+  AutoSizer,
+  CellMeasurer,
+  CellMeasurerCache,
+ } from 'react-virtualized'
 
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
@@ -20,8 +27,13 @@ function App() {
   const [graph, setGraph] = useState(false);
   const [word_counts, setWordcount] = useState(0);
   const [graph_info, addData] = useState({});
-  
 
+  const cache = React.useRef(new CellMeasurerCache({
+    fixedWidth: true, 
+    defaultHeight: 200,
+  })
+  );
+ 
   useEffect(() => {
     // import('./Database.json').then(data => setDatabase(data));
     // const data3 = concatinator()
@@ -44,7 +56,6 @@ function App() {
 
   const handleChange = (event, newValue) => {
     setRange(newValue);
-    // handleSearch(event);
   }
 
   const countOccurences = (string, word) => {
@@ -68,7 +79,7 @@ function App() {
             const count = countOccurences(text, regex);
             word_counter += count;
             counter += 1;
-            result_list.push(entry);
+            result_list = result_list.concat(entry);
 
             if (graph[year]) {
               graph[year] += count;
@@ -92,7 +103,7 @@ function App() {
           const count = countOccurences(text, searchword);
           word_counter += count;
           counter += 1;
-          result_list.push(entry);
+          result_list = result_list.concat(entry);
 
           if (graph[year]){
             graph[year] += count;
@@ -136,7 +147,7 @@ function App() {
     )
   }
 
-  if (!enlarge_result && !graph)
+  if (!enlarge_result)
   {
   return (
     <div className='Searchengine'>
@@ -146,20 +157,23 @@ function App() {
         <button type="button" onClick={handleSearch}> search </button>
         <Slider year_range = {year_range} handleChange = {handleChange}
          handleSearch = {handleSearch} valueText ={valueText}/>
-        <p>{result_counts} fragments were found</p>
-        <p> search word(s) occurred {word_counts} times in the database</p>
+        {result_counts > 0? <div><p>{result_counts} fragments were found</p>
+         <p> search word(s) occurred {word_counts} times in the database</p> </div>: null}
         <Checkbox value="strict search" onClick={tick}/>strict search
       </header>
-      <button type="button" onClick={show_graph}> show graph </button>
-      <Results results = {results} finalsearch = {finalsearch} enlargeResult={enlargeResult}/>
+      {result_counts > 0 && !graph ? <button className="graphButton" type="button" onClick={show_graph}> show graph </button>: null}
+      {graph ? <div id="graph">
+        <Graph graph_info={graph_info} show_graph={show_graph}/>
+        </div>: null}
+      <Results results = {results} finalsearch = {finalsearch} enlargeResult={enlargeResult} cache={cache}/>
     </div>
   );
 }
-else if (graph){
-  return (
-    <Graph graph_info = {graph_info}/>
-  )
-}
+// else if (graph){
+//   return (
+//     <Graph graph_info = {graph_info}/>
+//   )
+// }
 else {
   return (
     <BigResult big_res={big_res} finalsearch={finalsearch} goBack={goBack}/>

@@ -25,13 +25,15 @@ header {
 }
 
 .Results {
- max-width: 768px;
- margin: 100px;
+max-width: 800px;
+width: 100%;
+height: 100vh;
 }
 
 .Result {
   width: 100%;
   padding: 16px;
+  /* margin: 20px; */
   margin-bottom: 16px;
   background-color: rgb(240, 231, 216);
   border-radius: 16px;
@@ -115,3 +117,16 @@ h1 {
   padding: 16px;
   width: 100%;
 }
+
+#graph {
+  margin:50px;
+  float: right;
+  right: 50px;
+}
+
+.graphButton{
+  position: absolute;
+  top: 80px;
+  right: 250px;
+}
+
