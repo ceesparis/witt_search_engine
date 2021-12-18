@@ -84,7 +84,7 @@ function App() {
 
  const conSearch = (search) => {
   const searchwords = (search.trim()).split(' ');
-  console.log(searchwords);
+  // console.log(searchwords);
   var total_counter = 0;
   var total_word_counter = 0;
   var total_graph = {}
@@ -98,8 +98,9 @@ function App() {
       const cur_case_text = cur_case.text
       if (strict_search) {
         let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöë])'+  '\\b', 'g');
-        if (cur_case_text.includes(regex)===false) {
+        if (regex.test(cur_case_text)===false) {
           case_casualties.push(cur_case)
+          console.log(cur_case)
         }
       }
       const cur_word = searchwords[j];
