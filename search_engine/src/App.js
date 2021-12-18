@@ -76,17 +76,6 @@ function App() {
      total_result_list = total_result_list.concat(pack.result_list);
 
    }
-  //  for (var j = 0; j < total_result_list.length; j++){
-  //    const text_part = total_result_list[j].text
-  //   //  console.log(text_part)
-  //    var shank = searchwords.every((word) => {
-  //       if (text_part.includes(word)) {
-  //         return total_result_list[j];
-  //       }
-  //    })
-  //    console.log(shank)
-
-  //  }
    setCount(total_counter);
    setWordcount(total_word_counter);
    setResults(total_result_list);
