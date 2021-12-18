@@ -103,19 +103,34 @@ function App() {
   var case_zero = searchDatabase(searchwords[0])
   var case_zero_results = case_zero.result_list
   var case_casualties = []
-  for (var i = 1; i < searchwords.length; i++) {
-    const pack = searchDatabase(searchwords[i])
-    var pack_results = pack.result_list
-    for (var j = 0; j < case_zero_results.length; j++){
-      if (!(pack_results.includes(case_zero_results[j]))){
-        case_casualties.push(case_zero_results[j])
+  for (var i = 0; i < case_zero_results.length; i++) {
+    for (var j = 1; j < searchwords.length; j++){
+      const cur_case = case_zero_results[i];
+      const cur_case_text = cur_case.text
+      if (strict_search) {
+        let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöë])'+  '\\b', 'g');
+        if (cur_case_text.includes(regex)===false) {
+          case_casualties.push(cur_case)
+        }
+      }
+      const cur_word = searchwords[j];
+      if (cur_case_text.includes(cur_word)===false) {
+        case_casualties.push(cur_case)
+      }
     } 
   }
-}
-  const final_case_zero = case_zero_results.filter(n => case_casualties.includes(n))
-  console.log(final_case_zero)
-  setCount(final_case_zero.length);
-  setWordcount(final_case_zero.result_list);
+
+  const final_case_zero = case_zero_results.filter(n => (case_casualties.includes(n)===false))
+  // for (var k = 0; k < final_case_zero.length; k++) {
+  //   const count = countOccurences(text, regex);
+  //   word_counter += count;
+  // }
+
+  total_counter = final_case_zero.length
+  // total_word_counter = final_case_zero.word_counter
+  total_result_list = final_case_zero
+  setCount(total_counter);
+  setWordcount(total_word_counter);
   setResults(total_result_list);
   setFinalSearch(searchwords);
  
@@ -175,8 +190,8 @@ function App() {
     if (search === ''){
       return;
     } else {
-        disSearch(search);
-        // conSearch(search);
+        // disSearch(search);
+        conSearch(search);
         // searchDatabase(search);
       }
   }

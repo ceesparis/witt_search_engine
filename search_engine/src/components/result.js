@@ -13,7 +13,7 @@ const Result = ({result, finalsearch, enlargeResult}) => {
       <div className="result_text">
         <Highlighter
           highlightClassName="result_text"
-          searchWords={finalsearch}
+          searchWords={[finalsearch]}
           autoEscape={false}
           textToHighlight={result.text}
         />
