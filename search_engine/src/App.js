@@ -61,6 +61,66 @@ function App() {
     return string.split(word).length - 1;
  }
 
+ const disSearch = (search) => {
+   const searchwords = (search.trim()).split(' ');
+   console.log(searchwords);
+   var total_counter = 0;
+   var total_word_counter = 0;
+   var total_graph = {}
+   var total_result_list = [];
+   for (var i = 0; i < searchwords.length; i++) {
+     const pack = searchDatabase(searchwords[i])
+     total_counter += pack.counter;
+     total_word_counter += pack.word_counter;
+     console.log(total_graph);
+     total_result_list = total_result_list.concat(pack.result_list);
+
+   }
+  //  for (var j = 0; j < total_result_list.length; j++){
+  //    const text_part = total_result_list[j].text
+  //   //  console.log(text_part)
+  //    var shank = searchwords.every((word) => {
+  //       if (text_part.includes(word)) {
+  //         return total_result_list[j];
+  //       }
+  //    })
+  //    console.log(shank)
+
+  //  }
+   setCount(total_counter);
+   setWordcount(total_word_counter);
+   setResults(total_result_list);
+   setFinalSearch(searchwords);
+ }
+
+ const conSearch = (search) => {
+  const searchwords = (search.trim()).split(' ');
+  console.log(searchwords);
+  var total_counter = 0;
+  var total_word_counter = 0;
+  var total_graph = {}
+  var total_result_list = [];
+  var case_zero = searchDatabase(searchwords[0])
+  var case_zero_results = case_zero.result_list
+  var case_casualties = []
+  for (var i = 1; i < searchwords.length; i++) {
+    const pack = searchDatabase(searchwords[i])
+    var pack_results = pack.result_list
+    for (var j = 0; j < case_zero_results.length; j++){
+      if (!(pack_results.includes(case_zero_results[j]))){
+        case_casualties.push(case_zero_results[j])
+    } 
+  }
+}
+  const final_case_zero = case_zero_results.filter(n => case_casualties.includes(n))
+  console.log(final_case_zero)
+  setCount(final_case_zero.length);
+  setWordcount(final_case_zero.result_list);
+  setResults(total_result_list);
+  setFinalSearch(searchwords);
+ 
+
+}
   const searchDatabase = (search) => {
     var searchword = search.trim()
     var counter = 0;
@@ -87,12 +147,6 @@ function App() {
             }
           }
     }
-    addData(graph);
-    console.log(graph_info)
-    setCount(counter);
-    setResults(result_list);
-    setFinalSearch(regex);
-    setWordcount(word_counter)
     } else {
     for (var j in database) {
       const entry = database[j];
@@ -111,14 +165,9 @@ function App() {
           }
       }
     }
-    console.log('graph:', {graph_info})
-    addData(graph);
-    setWordcount(word_counter);
-    setCount(counter);
-    setResults(result_list);
-    setFinalSearch(search);
   }
-
+    const pack = {graph, word_counter, counter, result_list, searchword}
+    return pack;
 }
 
   const handleSearch = async (e) => {
@@ -126,8 +175,18 @@ function App() {
     if (search === ''){
       return;
     } else {
-        searchDatabase(search);
+        disSearch(search);
+        // conSearch(search);
+        // searchDatabase(search);
       }
+  }
+
+  const states = (plot, word_counter, counter, result_list) => {
+    addData(plot);
+    setWordcount(word_counter);
+    setCount(counter);
+    setResults(result_list);
+    setFinalSearch(search);
   }
 
   const enlargeResult = (result) => {
