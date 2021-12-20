@@ -7,12 +7,6 @@ import Searchbar from './components/searchbar'
 import Results from './components/results';
 import Graph from './components/graph'
 import BigResult from './components/bigresult'
-import {
-  List,
-  AutoSizer,
-  CellMeasurer,
-  CellMeasurerCache,
- } from 'react-virtualized'
 
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
@@ -63,7 +57,7 @@ function App() {
     setGraph(!graph);
   }
 
-  const handleChange = (event, newValue) => {
+  const handleSearchbar = (event, newValue) => {
     setRange(newValue);
   }
 
@@ -222,7 +216,7 @@ const normSearch = (search) => {
         <h1>Wittgenstein Search Engine</h1>
         <Searchbar setSearch={setSearch}/>
         <button type="button" onClick={handleSearch}> search </button>
-        <Slider year_range = {year_range} handleChange = {handleChange}
+        <Slider year_range = {year_range} handleChange = {handleSearchbar}
          handleSearch = {handleSearch} valueText ={valueText}/>
         {result_counts > 0? <div><p>{result_counts} fragments were found</p>
          <p> search word(s) occurred {word_counts} times in the database</p> </div>: null}
