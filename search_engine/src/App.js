@@ -3,10 +3,10 @@ import React from 'react';
 import data from './totalDatabase.json';
 import {Checkbox} from '@mui/material';
 import Slider from './components/slider'
-import Searchbar from './components/searchbar'
+import Searchbar from './components/searchbar';
 import Results from './components/results';
-import Graph from './components/graph'
-import BigResult from './components/bigresult'
+import Graph from './components/graph';
+import BigResult from './components/bigresult';
 
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
@@ -85,12 +85,18 @@ const normSearch = (search) => {
   var result_count = search_case.counter;
   var case_results = search_case.result_list;
   var word = search_case.searchword;
-  console.log(case_results);
+  console.log(graph_info)
   addData(graph_info);
   setWordcount(word_count);
   setCount(result_count);
   setResults(case_results);
-  setFinalSearch(word);
+  if (strict_search) {
+    let regex = new RegExp('\\b' + word + '(?![üïöëä])'+  '\\b', 'g');
+    setFinalSearch([regex])
+  }
+  else {
+    setFinalSearch(word);
+  }
 }
 
  const disSearch = (search) => {
@@ -102,14 +108,18 @@ const normSearch = (search) => {
   //  add the search results of each searchword to variables
    for (var i = 0; i < searchwords.length; i++) {
      const pack = searchDatabase(searchwords[i]);
-     total_counter += pack.counter;
      total_word_counter += pack.word_counter;
-     console.log(total_graph);
      total_result_list = total_result_list.concat(pack.result_list);
+     const case_graph = pack.graph;
+     total_graph = {...total_graph, ...case_graph};
    }
+  //  console.log(total_graph)
+   const uniq_results = [...total_result_list.reduce((map, obj) => map.set(obj.name, obj), new Map()).values()];
+   total_counter = uniq_results.length;
+   addData(total_graph);
    setCount(total_counter);
    setWordcount(total_word_counter);
-   setResults(total_result_list);
+   setResults(uniq_results);
    setFinalSearch(searchwords);
  }
 
@@ -130,7 +140,7 @@ const normSearch = (search) => {
       const cur_case = case_zero_results[i];
       const cur_case_text = cur_case.text
       if (strict_search) {
-        let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöë])'+  '\\b', 'g');
+        let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöëä])'+  '\\b', 'g');
         if (regex.test(cur_case_text)===false) {
           blacklist.push(cur_case)
           console.log(cur_case)
@@ -161,7 +171,7 @@ const normSearch = (search) => {
     var graph = {}
     var result_list = [];
     if (strict_search) {
-      let regex = new RegExp('\\b' + searchword + '(?![üïöë])'+  '\\b', 'g');
+      let regex = new RegExp('\\b' + searchword + '(?![üïöëä])'+  '\\b', 'g');
       for (var i in database) {
         const entry = database[i]
         const text = entry.text;
@@ -220,14 +230,26 @@ const normSearch = (search) => {
          handleSearch = {handleSearch} valueText ={valueText}/>
         {result_counts > 0? <div><p>{result_counts} fragments were found</p>
          <p> search word(s) occurred {word_counts} times in the database</p> </div>: null}
-        <Checkbox value="strict search" onClick={tick}/>strict search
-        <Checkbox value="conjunctive search" onClick={setCon_search}/> conjunctive search
-        <Checkbox value="disjunctive search" onClick={setDis_search}/> disjunctive search
+         <table>
+         <tbody>
+           <tr>
+            <td>
+            <Checkbox value="strict search" onClick={tick}/>strict search
+            </td>
+            <td>
+            <Checkbox value="conjunctive search" onClick={setCon_search}/> conjunctive search
+            </td>
+            <td>
+            <Checkbox value="disjunctive search" onClick={setDis_search}/> disjunctive search
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </header>
-      {result_counts > 0 && !graph ? <button className="graphButton" type="button" onClick={show_graph}> show graph </button>: null}
-      {graph ? <div id="graph">
-        <Graph graph_info={graph_info} show_graph={show_graph} />
-        </div>: null}
+      {result_counts > 0 && (!graph ? <button className="graphButton" type="button" onClick={show_graph}> show graph </button>: <button className="graphButton" type="button" onClick={show_graph}> hide graph </button>)}
+      {graph && <div id="graph">
+        <Graph graph_info={graph_info} show_graph={show_graph} finalsearch={finalsearch} strict_search={strict_search}/>
+        </div>}
       <Results results = {results} finalsearch = {finalsearch} enlargeResult={enlargeResult}/>
     </div>
   );

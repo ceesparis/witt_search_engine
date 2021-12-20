@@ -1,6 +1,16 @@
 import Plot from "react-plotly.js"
+// import JSON from json
 
-const Graph = ({graph_info, show_graph}) => {
+const Graph = ({graph_info, show_graph, finalsearch, strict_search}) => {
+var str_search = finalsearch.toString();
+if (strict_search){
+  if(!(/[,]/.test(str_search))) {
+    const i = str_search.indexOf('b')
+    const j = str_search.indexOf('(')
+    str_search = str_search.slice(i+1, j);
+  }
+}
+
 return (
   <div>
     <Plot
@@ -8,15 +18,13 @@ return (
       {
         x:Object.keys(graph_info),
         y:Object.values(graph_info),
-        type: 'scatter',
-        mode: 'lines',
+        type: 'scattergl',
         marker: {color: 'red'},
       },
-      // {type: 'line', x: [graph_info], y: [graph_info]},
+      // {type: 'line', x: [graph_info], y: [graph_info], marker: true},
     ]}
-    layout={ {width: 400, height: 400, title: 'A Fancy Plot'} }
+    layout={ {width: 400, height: 400, title: str_search} }
     />
-    <button className="graphButton" onClick={show_graph}>hide graph</button>
-    </div>
+  </div>
   )}
   export default Graph

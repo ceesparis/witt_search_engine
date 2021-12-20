@@ -1,12 +1,12 @@
 
-import Result from './result.js'
-import React, {useRef, useEffect} from 'react'
+import Result from './result.js';
+import React, {useRef, useEffect} from 'react';
 import {
   List,
   AutoSizer,
   CellMeasurer,
   CellMeasurerCache,
- } from 'react-virtualized'
+ } from 'react-virtualized';
 
 
 function usePrevious(value) {

@@ -21,14 +21,11 @@ def get_names(dom):
     return names
 
 def get_ms_url(name):
-    # i = name
     ms_url = f'http://wab.uib.no/cost-a32_xml/{name}'
     return ms_url
 
 def create_xml(url, name):
     xml = requests.get(url)
-    # print(xml.content)
-    # parse the data
     soup = BeautifulSoup(xml.content, 'lxml') 
     soup_string = str(soup)
 
@@ -49,7 +46,6 @@ counter = 0
 for filename in os.listdir('/Users/ceesparis/excerscises-cs50/python_xml/samples'):
     xml_to_dict(filename, database_dict, counter)
     counter = len(database_dict)
-    print(filename)
 
 j = json.dumps(database_dict)
 
