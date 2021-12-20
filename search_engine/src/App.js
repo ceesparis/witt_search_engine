@@ -27,21 +27,32 @@ function App() {
   const [graph, setGraph] = useState(false);
   const [word_counts, setWordcount] = useState(0);
   const [graph_info, addData] = useState({});
-  const cache = React.useRef(new CellMeasurerCache({
-    fixedWidth: true, 
-    defaultHeight: 200,
-  })
-  );
+  const [conjunct, setCon] = useState(false)
+  const [disjunct, setDis] = useState(false)
  
   useEffect(() => {
-    // import('./Database.json').then(data => setDatabase(data));
-    // const data3 = concatinator()
     setDatabase(data);
   }, [])
 
-
   const valueText = (value) => {
     return {value};
+  }
+
+  const enlargeResult = (result) => {
+    setEnlarge(true);
+    setBigres(result);
+  }
+
+  const goBack = () => {
+    setEnlarge(false);
+  }
+
+  const setCon_search = () => {
+    setCon(!conjunct);
+  }
+
+  const setDis_search = () => {
+    setDis(!disjunct);
   }
 
   const tick = () => {
@@ -50,7 +61,6 @@ function App() {
 
   const show_graph = () => {
     setGraph(!graph);
-    console.log('on!')
   }
 
   const handleChange = (event, newValue) => {
@@ -61,20 +71,47 @@ function App() {
     return string.split(word).length - 1;
  }
 
+ const handleSearch = async (e) => {
+  e.preventDefault();
+  if (search === ''){
+    return;
+  } else if (!(conjunct|disjunct)){
+      normSearch(search);
+  } else if (conjunct) {
+      conSearch(search);
+  } else {
+      disSearch(search);
+  }
+}
+
+const normSearch = (search) => {
+  const search_case = searchDatabase(search);
+  var graph_info = search_case.graph;
+  var word_count = search_case.word_counter;
+  var result_count = search_case.counter;
+  var case_results = search_case.result_list;
+  var word = search_case.searchword;
+  console.log(case_results);
+  addData(graph_info);
+  setWordcount(word_count);
+  setCount(result_count);
+  setResults(case_results);
+  setFinalSearch(word);
+}
+
  const disSearch = (search) => {
    const searchwords = (search.trim()).split(' ');
-   console.log(searchwords);
    var total_counter = 0;
    var total_word_counter = 0;
-   var total_graph = {}
+   var total_graph = {};
    var total_result_list = [];
+  //  add the search results of each searchword to variables
    for (var i = 0; i < searchwords.length; i++) {
-     const pack = searchDatabase(searchwords[i])
+     const pack = searchDatabase(searchwords[i]);
      total_counter += pack.counter;
      total_word_counter += pack.word_counter;
      console.log(total_graph);
      total_result_list = total_result_list.concat(pack.result_list);
-
    }
    setCount(total_counter);
    setWordcount(total_word_counter);
@@ -84,14 +121,16 @@ function App() {
 
  const conSearch = (search) => {
   const searchwords = (search.trim()).split(' ');
-  // console.log(searchwords);
   var total_counter = 0;
   var total_word_counter = 0;
   var total_graph = {}
   var total_result_list = [];
-  var case_zero = searchDatabase(searchwords[0])
+  var trim_first_search = searchwords[0].trim()
+  // get the search results for first search word
+  var case_zero = searchDatabase(trim_first_search)
   var case_zero_results = case_zero.result_list
-  var case_casualties = []
+  var blacklist = []
+  // if any searchword is not present in a fragment of the search result, put the fragment on the blacklist
   for (var i = 0; i < case_zero_results.length; i++) {
     for (var j = 1; j < searchwords.length; j++){
       const cur_case = case_zero_results[i];
@@ -99,34 +138,28 @@ function App() {
       if (strict_search) {
         let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöë])'+  '\\b', 'g');
         if (regex.test(cur_case_text)===false) {
-          case_casualties.push(cur_case)
+          blacklist.push(cur_case)
           console.log(cur_case)
         }
       }
       const cur_word = searchwords[j];
       if (cur_case_text.includes(cur_word)===false) {
-        case_casualties.push(cur_case)
+        blacklist.push(cur_case)
       }
     } 
   }
-
-  const final_case_zero = case_zero_results.filter(n => (case_casualties.includes(n)===false))
-  // for (var k = 0; k < final_case_zero.length; k++) {
-  //   const count = countOccurences(text, regex);
-  //   word_counter += count;
-  // }
-
+   // remove any blacklisted fragment from the search results of the first word
+  const final_case_zero = case_zero_results.filter(n => (blacklist.includes(n)===false))
   total_counter = final_case_zero.length
-  // total_word_counter = final_case_zero.word_counter
   total_result_list = final_case_zero
   setCount(total_counter);
   setWordcount(total_word_counter);
   setResults(total_result_list);
   setFinalSearch(searchwords);
- 
-
 }
+
   const searchDatabase = (search) => {
+    // if a word is found in an entry in the database, add this entry to results
     var searchword = search.trim()
     var counter = 0;
     var word_counter = 0;
@@ -144,7 +177,6 @@ function App() {
             word_counter += count;
             counter += 1;
             result_list = result_list.concat(entry);
-
             if (graph[year]) {
               graph[year] += count;
             } else {
@@ -175,34 +207,6 @@ function App() {
     return pack;
 }
 
-  const handleSearch = async (e) => {
-    e.preventDefault()
-    if (search === ''){
-      return;
-    } else {
-        // disSearch(search);
-        conSearch(search);
-        // searchDatabase(search);
-      }
-  }
-
-  const states = (plot, word_counter, counter, result_list) => {
-    addData(plot);
-    setWordcount(word_counter);
-    setCount(counter);
-    setResults(result_list);
-    setFinalSearch(search);
-  }
-
-  const enlargeResult = (result) => {
-    setEnlarge(true);
-    setBigres(result);
-  }
-
-  const goBack = () => {
-    setEnlarge(false);
-  }
-
 
   if (database.length === 0) {
     return (
@@ -223,6 +227,8 @@ function App() {
         {result_counts > 0? <div><p>{result_counts} fragments were found</p>
          <p> search word(s) occurred {word_counts} times in the database</p> </div>: null}
         <Checkbox value="strict search" onClick={tick}/>strict search
+        <Checkbox value="conjunctive search" onClick={setCon_search}/> conjunctive search
+        <Checkbox value="disjunctive search" onClick={setDis_search}/> disjunctive search
       </header>
       {result_counts > 0 && !graph ? <button className="graphButton" type="button" onClick={show_graph}> show graph </button>: null}
       {graph ? <div id="graph">
@@ -232,11 +238,7 @@ function App() {
     </div>
   );
 }
-// else if (graph){
-//   return (
-//     <Graph graph_info = {graph_info}/>
-//   )
-// }
+
 else {
   return (
     <BigResult big_res={big_res} finalsearch={finalsearch} goBack={goBack}/>

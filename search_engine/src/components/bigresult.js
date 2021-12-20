@@ -10,11 +10,10 @@ const BigResult = ({big_res, finalsearch, goBack}) => {
 
           <Highlighter
             highlightClassName="bigresult_text"
-            searchWords={[finalsearch]}
+            searchWords={finalsearch}
             autoEscape={false}
             textToHighlight={big_res.text}
           />
-     
         </div>
 </div>
     )

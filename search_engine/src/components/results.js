@@ -7,10 +7,6 @@ import {
   CellMeasurer,
   CellMeasurerCache,
  } from 'react-virtualized'
-import { defaultRowRenderer } from 'react-virtualized/dist/es/Table'
-import { keyframes } from '@mui/styled-engine'
-import { height } from '@mui/system'
-import App from '../App.js'
 
 
 function usePrevious(value) {
@@ -31,6 +27,7 @@ function areResultsEqual(results1, results2) {
   )
 }
 
+// if there are new results, refresh CellMeasurerCache to ensure the fragments are well placed
 const Results = ({results, finalsearch, enlargeResult}) => {
   const cache = useRef(new CellMeasurerCache({
     fixedWidth: true, 
