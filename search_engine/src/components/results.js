@@ -47,31 +47,31 @@ const Results = ({results, finalsearch, enlargeResult}) => {
 
     return (
         <div className='Results'>
-        <AutoSizer>
-          {({width, height}) => 
-            <List
-            width={width}
-            height={height}
-            rowHeight={cache.current.rowHeight}
-            deferredMeasurementCache={cache.current}
-            rowCount={results.length}
-            rowRenderer={({key, index, style, parent}) =>{
-              const result = results[index];
-              return (
-                <CellMeasurer
-                key={key}
-                cache={cache.current}
-                parent={parent}
-                columnIndex={0}
-                rowIndex={index}>
-                <div style={style}>
-                  <Result result={result} finalsearch={finalsearch} key={result.name} enlargeResult={enlargeResult}/>
-                </div>
-                </CellMeasurer>
-              )
-            }} />
-          }
-        </AutoSizer>
+          <AutoSizer>
+            {({width, height}) => 
+              <List
+              width={width}
+              height={height}
+              rowHeight={cache.current.rowHeight}
+              deferredMeasurementCache={cache.current}
+              rowCount={results.length}
+              rowRenderer={({key, index, style, parent}) =>{
+                const result = results[index];
+                return (
+                  <CellMeasurer
+                  key={key}
+                  cache={cache.current}
+                  parent={parent}
+                  columnIndex={0}
+                  rowIndex={index}>
+                  <div style={style}>
+                    <Result result={result} finalsearch={finalsearch} key={result.name} enlargeResult={enlargeResult}/>
+                  </div>
+                  </CellMeasurer>
+                )
+              }} />
+            }
+          </AutoSizer>
         </div>
     )
 }

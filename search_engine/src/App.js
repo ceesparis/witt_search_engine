@@ -110,10 +110,15 @@ const normSearch = (search) => {
      const pack = searchDatabase(searchwords[i]);
      total_word_counter += pack.word_counter;
      total_result_list = total_result_list.concat(pack.result_list);
-     const case_graph = pack.graph;
+     var case_graph = pack.graph;
+     const case_keys = Object.keys(pack.graph)
+     case_keys.forEach(key => {
+       if (key in total_graph) {
+          case_graph[key] += total_graph[key];
+       }
+     })
      total_graph = {...total_graph, ...case_graph};
    }
-  //  console.log(total_graph)
    const uniq_results = [...total_result_list.reduce((map, obj) => map.set(obj.name, obj), new Map()).values()];
    total_counter = uniq_results.length;
    addData(total_graph);
@@ -126,14 +131,14 @@ const normSearch = (search) => {
  const conSearch = (search) => {
   const searchwords = (search.trim()).split(' ');
   var total_counter = 0;
-  var total_word_counter = 0;
   var total_graph = {}
   var total_result_list = [];
   var trim_first_search = searchwords[0].trim()
   // get the search results for first search word
-  var case_zero = searchDatabase(trim_first_search)
-  var case_zero_results = case_zero.result_list
-  var blacklist = []
+  var case_zero = searchDatabase(trim_first_search);
+  var case_zero_results = case_zero.result_list;
+  console.log(case_zero_results)
+  var blacklist = [];
   // if any searchword is not present in a fragment of the search result, put the fragment on the blacklist
   for (var i = 0; i < case_zero_results.length; i++) {
     for (var j = 1; j < searchwords.length; j++){
@@ -156,6 +161,21 @@ const normSearch = (search) => {
   const final_case_zero = case_zero_results.filter(n => (blacklist.includes(n)===false))
   total_counter = final_case_zero.length
   total_result_list = final_case_zero
+  var total_word_counter = 0;
+  total_result_list.forEach(result => {
+    const text = result.text;
+    searchwords.forEach(word => {
+      const this_count = countOccurences(text, word);
+      total_word_counter += this_count;
+      const year = result.date.substring(0, 4);
+      if (total_graph[year]){
+        total_graph[year] += this_count;
+      } else {
+        total_graph[year] = this_count;
+      }
+    })
+  })
+  addData(total_graph);
   setCount(total_counter);
   setWordcount(total_word_counter);
   setResults(total_result_list);
