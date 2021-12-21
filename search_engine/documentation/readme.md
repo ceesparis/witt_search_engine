@@ -16,7 +16,7 @@ This application offers an alternative search engine for the unpublished work of
 ![start screen of the search engine](./pictures/startscreen.png)
 
 *search resulsts*
-![search results for 'Traum | Freud'](/pictures/searchHund.png)
+![search results for 'Traum | Freud'](pictures/searchHund.png)
 
 *visualizations search results*
 ![visualizations search results](doc/graphs.jpeg)
