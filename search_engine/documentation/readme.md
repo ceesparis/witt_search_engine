@@ -42,7 +42,7 @@ This application offers an alternative search engine for the unpublished work of
 - allows the user to search for multiple words at the same time (disjunctive search), or for fragments in which multiple words occur seperately (conjunctive search)
 - allows searching for occurences of the literal input only (strict search), for example, searching for 'fremd' but not for 'Befremdung'
 
-**further ideas for adding functionality**
+**further ideas for additional functionality**
 - allowing hybrid searches using logic symbols (fremd|Schein && Traum)
 - showing different words in different lines in the graphical representation 
 - including links to the complete manuscript to each of the search results

@@ -11,7 +11,7 @@ import BigResult from './components/bigresult';
 function App() {
   const [finalsearch, setFinalSearch] = useState('');
   const [results, setResults] = useState([]);
-  const [database, setDatabase] = useState([]);
+  const [database, setDatabase] = useState({});
   const [result_counts, setCount] = useState(0);
   const [enlarge_result, setEnlarge] = useState(false);
   const [big_res, setBigres] = useState([]);
@@ -189,10 +189,14 @@ const normSearch = (search) => {
     var graph = {}
     var result_list = [];
     if (strict_search) {
-      let regex = new RegExp('\\b' + searchword + '(\.)?' + '(?![üïöëä])' + '\\b', 'g');
+      // `\b${searchword}(\.)?(?![üïöëä])\b`
+      // let regex = new RegExp('\\b' + searchword + '(\.)?' + '(?![üïöëä])' + '\\b', 'g');
+      let regex = new RegExp(`\\b${searchword}\\b`, 'gmiu');
       console.log(regex)
-      for (var i in database) {
-        const entry = database[i]
+      // console.log(Object.keys(database).length)
+      Object.keys(database).forEach(i => {
+        let regex = new RegExp(`\\b${searchword}\\b`, 'gmiu');
+        const entry = database[i];
         const text = entry.text;
         const year = entry.date.substring(0, 4);
           if ((regex.test(text)) && (year >= year_range[0] && year <= year_range[1])){
@@ -206,7 +210,10 @@ const normSearch = (search) => {
               graph[year] = count;
             }
           }
-    }
+
+    })
+    console.log(result_list.length)
+      
     } else {
     for (var j in database) {
       const entry = database[j];
