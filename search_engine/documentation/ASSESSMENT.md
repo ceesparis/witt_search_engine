@@ -11,12 +11,12 @@
 
 **Big Decisions**
 
-## 1: simplifying the database
+#### 1: simplifying the database
 
 I simplified the manuscripts by converting the xml files into JSON files which only contained the information I was interested in (the text itself, the date, and the location of the text in the manuscripts) and got rid of the information I was less interested in (information about the type of each word, pictures of the actual manuscript). This was ultimately a trade off between easy data searching and losing a lot of possible features. I think this was a good decision, because my goal was to make a search engine for philosophy students, and the aspects of the database relevant for that group are kept intact. Something I would have still liked to implement is a link in each result to the whole manuscript, so you can keep reading, instead of having to find the rest of the manuscript on a different site. 
 
 
-## 2: working with one central searchDatabase function
+#### 2: working with one central searchDatabase function
 
 Most of the work of my searchengine is done in the searchDatabase function. In retrospect, I would have liked for this function to return an object of a class that was specified beforehand, instead of an object-variable. I think this would have made my code a lot tidier and easier to work with. 
 
