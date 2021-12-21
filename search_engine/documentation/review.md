@@ -10,12 +10,12 @@ I have the suspicion that not all my states are neccesary. For example, result_c
 
 **Point 2: use more comments to describe what is happening in your code**
 
-Niels pointed out that my code has very few comments, and the ones that do exist contain only very sparse descriptions of what is going on. 
+Niels pointed out that my code has very few comments, and the ones that do exist contain only very sparse descriptions of what is going on. It would be better have more thorough comments to guide anyone reading the code through what is going on. 
 
 
 **Point 3: ridding the code of repetition**
 
-At various places, my code is repetitive. For example, I set the states in a similar manner after each type of search (normal, disjunctive, or conjunctive). Also, when using strict search, I repeat code that is almost identical to a regular search. I could make this part of the searchDatabase function into a different function, which maybe takes an optional argument for strict search. 
+At various places, my code is repetitive. For example, I set the states in a similar manner after each type of search (normal, disjunctive, or conjunctive). Also, when using strict search, I repeat code that is almost identical to a regular search. I could make this part of the searchDatabase function into a different function, which maybe takes an optional argument for strict search. By doing this, I would make the code less verbose and more readable. Another obvious and unneccesary repetition is the construction of the regular expression. 
 
 
 **Point 4: import alphabetically**
