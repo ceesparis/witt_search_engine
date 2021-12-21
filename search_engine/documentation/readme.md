@@ -12,50 +12,53 @@ Most of the work of the late philosopher Ludwig Wittgenstein has remained unpubl
 
 This application offers an alternative search engine for the unpublished work of Wittgenstein. The focus of this engine will be to optimize the search engine specifically for philosophical research. 
 
+
+
+<img src = '../pictures/startscreen.png' alt='image' width='450'>
+
 *start screen*
-![start screen of the search engine](./pictures/startscreen.png)
 
-*search resulsts*
-![search results for 'Traum | Freud'](pictures/searchHund.png)
 
-*visualizations search results*
-![visualizations search results](doc/graphs.jpeg)
 
+
+<img src = '../pictures/searchHund.png' alt='image' width='450'>
+
+*search results for 'Hund'*
+
+
+
+
+<img src = '../pictures/searchfremd+graph.png' alt='image' width='450'>
+
+*strict search results and graph for 'fremd'*
+
+
+**basic functionality**
+- searches for user's input through a database consisting of a part of the unpublished manuscripts of Ludwig Wittgenstein. Returns fragments in which the input is found, along with the date and name of the manuscript in which it was found
+
+**additional functionality**
+- highlights search words in search results
+- provides a graphical visualization of search results 
+- allows the user to search for multiple words at the same time (disjunctive search), or for fragments in which multiple words occur seperately (conjunctive search)
+- allows searching for occurences of the literal input only (strict search), for example, searching for 'fremd' but not for 'Befremdung'
+
+**further ideas for adding functionality**
+- allowing hybrid searches using logic symbols (fremd|Schein && Traum)
+- showing different words in different lines in the graphical representation 
+- including links to the complete manuscript to each of the search results
+- creating a database consisting of the complete unpublished works of Wittgenstein 
 
 **data sources**
 
 - xml files containing samples of unpublished work (available through [university of bergen](http://wab.uib.no/cost-a32_xml/))
 
 
-**external components**
+**acknowledgements**
 - Plotly Javascript for visualizations of the occurence of searchword(s) in the database
-
-
-**similar webapps**
--Open Access to transcriptions of the Wittgenstein Nachlass from the university of Bergen, Nachlass search engine
-
-This is the only real ‘competitor’(also the site from which I will lift the actual manuscripts). What is good about the site is that it has some advanced features, 
-Such as returning the ‘types’ of source where the words is found (found remarks, manuscripts, typescripts etc.) and the number of times the word respectively occurs in these types. It also does not only return the locations the word was found but also a fragment of the text in which the word is present, that you can expand. Another very useful ability is that you can filter on years. For example, you can search for a word only in the unpublished works between 1932 and 1934. 
-It also provides visualisations for the occurrence of a word throughout the years. 
-
-What is bad about the site is that it it lacking some functionality which is crucial for efficient research. 
-For a start, you can either search for multiple words in the whole body of work, or for two words connected with a literal ‘&’ sign, but you cannot search for places in the work where two words are in close vicinity to each other, although not directly tied via an ‘&’-sign.  
-The second issue is that there is no way to limit search to literal input. Words occurring in other words are also returned. 
-
-It is often the case that you are interested in a word only in a specific context. For example, you want to research what Wittgenstein said about dreams, but specifically in relation to Freud. Such a combined search is currently hard to do in this search engine, which leads to inefficient searching of the work. 
-
-The visualisations of the data returned are also uninformative as they stand. It would be better to be able to separate the search words you typed in, to see how much and where they occur in the body of work. 
-
-Also, the search engine on the whole is not very user friendly. 
-
-
-**hardest parts**
-
-- getting the complete unpublished work as xml-file
-- implement a program that can search this xml file not only for specific words, but also for passages where multiple words occur. 
-- search for the searchwords individually as well as for 'contexts' where they all occur, so that the subsequent visualizations can be a lot more informative. 
-- keeping intact the functionality of the University of Bergen search engine, by making use of the xml make up (keeping track of what kind of work the word is found in etc.)
-- making the application user-friendly
+- react-virtualized, used for returning the result-components to the screen
+- In my scripts folder, I used the helpers.py which was given in the imdb-scraping asignment
+- I made use of the MUI library for my slider and checkboxes
+- I made use of the Highlighter component from react-highlight-words
 
 
 
