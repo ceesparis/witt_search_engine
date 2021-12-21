@@ -85,13 +85,12 @@ const normSearch = (search) => {
   var result_count = search_case.counter;
   var case_results = search_case.result_list;
   var word = search_case.searchword;
-  console.log(graph_info)
   addData(graph_info);
   setWordcount(word_count);
   setCount(result_count);
   setResults(case_results);
   if (strict_search) {
-    let regex = new RegExp('\\b' + word + '(?![üïöëä])'+  '\\b', 'g');
+    let regex = new RegExp('\\b' + word + '(?![üïöëä])'+ '\\b', 'g');
     setFinalSearch([regex])
   }
   else {
@@ -137,7 +136,6 @@ const normSearch = (search) => {
   // get the search results for first search word
   var case_zero = searchDatabase(trim_first_search);
   var case_zero_results = case_zero.result_list;
-  console.log(case_zero_results)
   var blacklist = [];
   // if any searchword is not present in a fragment of the search result, put the fragment on the blacklist
   for (var i = 0; i < case_zero_results.length; i++) {
@@ -146,14 +144,14 @@ const normSearch = (search) => {
       const cur_case_text = cur_case.text
       if (strict_search) {
         let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöëä])'+  '\\b', 'g');
+        console.log(regex)
         if (regex.test(cur_case_text)===false) {
-          blacklist.push(cur_case)
-          console.log(cur_case)
+          blacklist.push(cur_case);
         }
       }
       const cur_word = searchwords[j];
       if (cur_case_text.includes(cur_word)===false) {
-        blacklist.push(cur_case)
+        blacklist.push(cur_case);
       }
     } 
   }
@@ -191,7 +189,8 @@ const normSearch = (search) => {
     var graph = {}
     var result_list = [];
     if (strict_search) {
-      let regex = new RegExp('\\b' + searchword + '(?![üïöëä])'+  '\\b', 'g');
+      let regex = new RegExp('\\b' + searchword + '(\.)?' + '(?![üïöëä])' + '\\b', 'g');
+      console.log(regex)
       for (var i in database) {
         const entry = database[i]
         const text = entry.text;
