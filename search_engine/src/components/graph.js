@@ -1,5 +1,4 @@
 import Plot from "react-plotly.js"
-// import JSON from json
 
 const Graph = ({graph_info, show_graph, finalsearch, strict_search}) => {
 var str_search = finalsearch.toString();

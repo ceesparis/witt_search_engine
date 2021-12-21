@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import data from './totalDatabase.json';
 import {Checkbox} from '@mui/material';

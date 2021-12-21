@@ -1,4 +1,3 @@
-
 import Result from './result.js';
 import React, {useRef, useEffect} from 'react';
 import {
