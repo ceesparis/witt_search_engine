@@ -75,4 +75,4 @@ const Results = ({results, finalsearch, enlargeResult}) => {
     )
 }
 
-export default Results
+export default Results;

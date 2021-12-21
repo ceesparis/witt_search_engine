@@ -10,6 +10,13 @@ body {
   background-color: #EEE;
 }
 
+button {
+  height: 40px;
+  width: 100px;
+  font-size: large;
+  background-color: whitesmoke;
+}
+
 .App {
   display: flex;
   flex-direction: column;
@@ -65,9 +72,13 @@ height: 100vh;
 }
 
 #goback {
-  width: auto;
-  margin: auto;
-  display: flex;
+  width: 70px;
+  height: 30px;
+  margin-top: 20px;
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  font-display: center;
   background-color: green;
 }
 

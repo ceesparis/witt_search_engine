@@ -10,4 +10,4 @@ const Searchbar = ({setSearch, handleSearch}) => {
       </form>
    )
   }
-  export default Searchbar
+  export default Searchbar;

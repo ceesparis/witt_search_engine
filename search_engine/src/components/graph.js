@@ -1,11 +1,11 @@
-import Plot from "react-plotly.js"
+import Plot from "react-plotly.js";
 
 const Graph = ({graph_info, show_graph, finalsearch, strict_search}) => {
 var str_search = finalsearch.toString();
 if (strict_search){
   if(!(/[,]/.test(str_search))) {
-    const i = str_search.indexOf('b')
-    const j = str_search.indexOf('(')
+    const i = str_search.indexOf('b');
+    const j = str_search.indexOf('(');
     str_search = str_search.slice(i+1, j);
   }
 }
@@ -26,4 +26,4 @@ return (
     />
   </div>
   )}
-  export default Graph
+  export default Graph;

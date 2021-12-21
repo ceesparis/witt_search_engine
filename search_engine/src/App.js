@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import data from './totalDatabase.json';
 import {Checkbox} from '@mui/material';
-import Slider from './components/slider'
+import Slider from './components/slider';
 import Searchbar from './components/searchbar';
 import Results from './components/results';
 import Graph from './components/graph';
@@ -90,7 +90,7 @@ const normSearch = (search) => {
   setCount(result_count);
   setResults(case_results);
   if (strict_search) {
-    let regex = new RegExp('\\b' + word + '(?![üïöëä])'+ '\\b', 'g');
+    let regex = new RegExp(`\\b${word}(?![üïöëä])\\b`, 'gm');
     setFinalSearch([regex])
   }
   else {
@@ -106,7 +106,8 @@ const normSearch = (search) => {
    var total_result_list = [];
   //  add the search results of each searchword to variables
    for (var i = 0; i < searchwords.length; i++) {
-     const pack = searchDatabase(searchwords[i]);
+     const searchword = searchwords[i].trim()
+     const pack = searchDatabase(searchword);
      total_word_counter += pack.word_counter;
      total_result_list = total_result_list.concat(pack.result_list);
      var case_graph = pack.graph;
@@ -130,9 +131,9 @@ const normSearch = (search) => {
  const conSearch = (search) => {
   const searchwords = (search.trim()).split(' ');
   var total_counter = 0;
-  var total_graph = {}
+  var total_graph = {};
   var total_result_list = [];
-  var trim_first_search = searchwords[0].trim()
+  var trim_first_search = searchwords[0].trim();
   // get the search results for first search word
   var case_zero = searchDatabase(trim_first_search);
   var case_zero_results = case_zero.result_list;
@@ -143,8 +144,7 @@ const normSearch = (search) => {
       const cur_case = case_zero_results[i];
       const cur_case_text = cur_case.text
       if (strict_search) {
-        let regex = new RegExp('\\b' + searchwords[j] + '(?![üïöëä])'+  '\\b', 'g');
-        console.log(regex)
+        let regex = new RegExp(`\\b${searchwords[j]}(?![üïöëä])\\b`, 'gm');
         if (regex.test(cur_case_text)===false) {
           blacklist.push(cur_case);
         }
@@ -156,9 +156,9 @@ const normSearch = (search) => {
     } 
   }
    // remove any blacklisted fragment from the search results of the first word
-  const final_case_zero = case_zero_results.filter(n => (blacklist.includes(n)===false))
-  total_counter = final_case_zero.length
-  total_result_list = final_case_zero
+  const final_case_zero = case_zero_results.filter(n => (blacklist.includes(n)===false));
+  total_counter = final_case_zero.length;
+  total_result_list = final_case_zero;
   var total_word_counter = 0;
   total_result_list.forEach(result => {
     const text = result.text;
@@ -182,20 +182,15 @@ const normSearch = (search) => {
 
   const searchDatabase = (search) => {
     // if a word is found in an entry in the database, add this entry to results
-    var searchword = search.trim()
+    var searchword = search.trim();
     var counter = 0;
     var word_counter = 0;
     searchword = Object.values({searchword});
-    var graph = {}
+    var graph = {};
     var result_list = [];
     if (strict_search) {
-      // `\b${searchword}(\.)?(?![üïöëä])\b`
-      // let regex = new RegExp('\\b' + searchword + '(\.)?' + '(?![üïöëä])' + '\\b', 'g');
-      let regex = new RegExp(`\\b${searchword}\\b`, 'gmiu');
-      console.log(regex)
-      // console.log(Object.keys(database).length)
       Object.keys(database).forEach(i => {
-        let regex = new RegExp(`\\b${searchword}\\b`, 'gmiu');
+        let regex = new RegExp(`\\b${searchword}(?![üïöëä])\\b`, 'gm');
         const entry = database[i];
         const text = entry.text;
         const year = entry.date.substring(0, 4);
@@ -212,7 +207,6 @@ const normSearch = (search) => {
           }
 
     })
-    console.log(result_list.length)
       
     } else {
     for (var j in database) {
@@ -233,7 +227,7 @@ const normSearch = (search) => {
       }
     }
   }
-    const pack = {graph, word_counter, counter, result_list, searchword}
+    const pack = {graph, word_counter, counter, result_list, searchword};
     return pack;
 }
 

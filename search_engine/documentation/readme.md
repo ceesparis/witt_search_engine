@@ -10,25 +10,27 @@ Most of the work of the late philosopher Ludwig Wittgenstein has remained unpubl
 
 **solution**
 
-This application offers an alternative search engine for the unpublished work of Wittgenstein. The focus of this engine will be to optimize the search engine specifically for philosophical research. 
+This application offers an alternative search engine for the unpublished work of Wittgenstein. The aim of the search engine is to offer an easy-to-use tool for navigating the manuscripts for philosophical research.
+
+[go to the screencast](https://youtu.be/e-Sa-2uArgo)
 
 
 
-<img src = '../pictures/startscreen.png' alt='image' width='450'>
+<img src = '../pictures/startscreen.png' alt='image' width='500'>
 
 *start screen*
 
 
 
 
-<img src = '../pictures/searchHund.png' alt='image' width='450'>
+<img src = '../pictures/searchHund.png' alt='image' width='500'>
 
 *search results for 'Hund'*
 
 
 
 
-<img src = '../pictures/searchfremd+graph.png' alt='image' width='450'>
+<img src = '../pictures/searchfremd+graph.png' alt='image' width='500'>
 
 *strict search results and graph for 'fremd'*
 

@@ -1,5 +1,5 @@
 import Highlighter from 'react-highlight-words';
-import React from 'react'
+import React from 'react';
 
 
 const Result = ({result, finalsearch, enlargeResult}) => {
@@ -19,4 +19,4 @@ const Result = ({result, finalsearch, enlargeResult}) => {
       </div>
           )
         }
-export default Result 
+export default Result ;
