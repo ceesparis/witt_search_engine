@@ -12,7 +12,7 @@ Most of the work of the late philosopher Ludwig Wittgenstein has remained unpubl
 
 This application offers an alternative search engine for the unpublished work of Wittgenstein. The aim of the search engine is to offer an easy-to-use tool for navigating the manuscripts for philosophical research.
 
-[go to the screencast](https://youtu.be/e-Sa-2uArgo)
+[go to the screencast](https://youtu.be/QuCuBDg8M2g)
 
 
 
